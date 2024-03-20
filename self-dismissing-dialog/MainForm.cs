@@ -11,14 +11,14 @@ namespace self_dismissing_dialog
             {
                 if (!ConnPropsForm.Visible)
                 {
-                    ConnPropsForm.ShowDialog();
+                    Text = ConnPropsForm.ShowDialog(this).ToString();
                 }
             };
         }
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            ConnPropsForm.ShowDialog(this);
+            Text = ConnPropsForm.ShowDialog(this).ToString();
         }
         ConnPropsForm ConnPropsForm = new ConnPropsForm();
     }
