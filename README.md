@@ -4,6 +4,7 @@ As I understand it, you want the form to self-close with `DialogResult.OK`. If t
 
 [![closing in 10][1]][1]
 
+###### Self-Close
 ```
 public partial class ConnPropsForm : Form
 {
@@ -29,6 +30,36 @@ public partial class ConnPropsForm : Form
     }
 }
 ```
+___
 
+The calling method can do the same thing. Here, the main form aborts the countdown after 5 seconds the first time (only) that `ConnPropsForm` is shown.
+
+###### External-Close
+```
+public partial class MainForm : Form
+{
+    public MainForm()
+    {
+        InitializeComponent();
+        Disposed += (sender, e) =>ConnPropsForm.Dispose();
+        buttonShow.Click += (sender, e) =>
+        {
+            if (!ConnPropsForm.Visible)
+            {
+                Text = ConnPropsForm.ShowDialog(this).ToString();
+            }
+        };
+    }
+    protected override async void OnLoad(EventArgs e)
+    {
+        base.OnLoad(e);
+        BeginInvoke(() => Text = ConnPropsForm.ShowDialog(this).ToString());
+
+        await Task.Delay(TimeSpan.FromSeconds(5));
+        ConnPropsForm.DialogResult = DialogResult.Abort;
+    }
+    ConnPropsForm ConnPropsForm = new ConnPropsForm();
+}
+```
 
   [1]: https://i.stack.imgur.com/3c65T.png

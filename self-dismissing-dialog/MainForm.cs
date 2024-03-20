@@ -15,10 +15,13 @@ namespace self_dismissing_dialog
                 }
             };
         }
-        protected override void OnLoad(EventArgs e)
+        protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            Text = ConnPropsForm.ShowDialog(this).ToString();
+            BeginInvoke(() => Text = ConnPropsForm.ShowDialog(this).ToString());
+
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            ConnPropsForm.DialogResult = DialogResult.Abort;
         }
         ConnPropsForm ConnPropsForm = new ConnPropsForm();
     }
